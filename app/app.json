@@ -1,0 +1,58 @@
+{
+	"name": "eco_driving",
+	"url_name": "ecodriving",
+	"title": "Eco Driving",
+	"description": "Eco Driving is a comprehensive driving quality control system that allows to evaluate drivers’ behavior and the way they treat their vehicles.",
+	"author": {
+		"name": "",
+		"url": ""
+	},
+	"licenses": [
+		{
+			"type":" LGPL",
+			"url": "http://www.gnu.org/licenses/lgpl.html"
+		}
+	],
+	"dependencies": {
+		"jquery": "1.8.3"
+	},
+	"modules": [
+		"sdk"
+	],
+	"params": [
+		"Active SID",
+		"Base URL",
+		"Host URL",
+		"Language",
+		"Current user"
+	],
+	"docs": {},
+	"language": [
+		"en",
+		"ru",
+		"sk",
+		"ee",
+		"fi",
+		"es",
+		"lv",
+		"hu",
+		"de"
+	],
+	"build_date": "2015-06-01",
+	"release_date": "2015-02-20",
+	"version": "1.0",
+	"keywords": [
+		"wialon",
+		"wialon-apps"
+	],
+	"browser": {
+		"ie": "9+",
+		"opera": "10+",
+		"safari": "10+",
+		"chrome": "20+",
+		"firefox": "15+"
+	},
+	"logo": "logo.png",
+	"images_path": "images",
+	"desc_path": "desc"
+}
