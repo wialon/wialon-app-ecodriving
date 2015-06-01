@@ -27,6 +27,9 @@
 		"Current user"
 	],
 	"docs": {},
+	"links": {
+		"github": "https://github.com/wialon/wialon-app-ecodriving"
+	},
 	"language": [
 		"en",
 		"ru",

@@ -2,9 +2,11 @@
 This is WEB application based on Apps from Gurtam (http://apps.wialon.com).
 
 ## Description:
-Eco Driving is a comprehensive driving quality control system that allows to evaluate drivers’ behavior and the way they treat their vehicles.
-Therefore, this easy-to-use and very effective App helps not only to extend the car’s life, but to ensure goods safety, if we speak about trucking company.  
-The App records three main parameters: sudden acceleration, sharp turn and hard braking. All the maneuvers with violations are displayed in a special table with brief explanatory information. You can personally set the evaluation criteria, i.e. the «loyalty» mode, changing response level to different violations. Also, you can choose the vehicle type that is also taken into account while calculating the final score. iDriveSafe goes perfect with any type of GPS/GLONASS tracking hardware, which makes it absolutely flexible.
+Eco Driving is an app for refined vehicle and driving-behaviour analysis.
+Estimation will be beased on the following parameters ‒ speed limits violations, harsh acceleration,
+harsh braking, cornering, and certain custom parameters (sensor data) to be taken into account.
+The system of norms and standards can be easily adjusted for speficic vehicle types and drivers;
+and it’s up to integrators to develop their approaches towards penalties/rewards based on Eco Driving results.
 
 ## License:
 [The MIT License](../master/LICENSE-MIT)
