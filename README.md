@@ -7,7 +7,7 @@ Therefore, this easy-to-use and very effective App helps not only to extend the 
 The App records three main parameters: sudden acceleration, sharp turn and hard braking. All the maneuvers with violations are displayed in a special table with brief explanatory information. You can personally set the evaluation criteria, i.e. the «loyalty» mode, changing response level to different violations. Also, you can choose the vehicle type that is also taken into account while calculating the final score. iDriveSafe goes perfect with any type of GPS/GLONASS tracking hardware, which makes it absolutely flexible.
 
 ## License:
-LGPL: http://www.gnu.org/licenses/lgpl.html
+[The MIT License](../master/LICENSE-MIT)
 
 ## Requirements:
  * Browser: Google Chrome 20+, Firefox 15+, Safari 5+, IE 9+, Opera 10+
