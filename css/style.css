@@ -10,6 +10,7 @@ body{ height:100%; font-family:Arial; font-size:12px; -webkit-touch-callout:none
 .t { color: #926dbb; }
 .sp { color: #8b9e2a; }
 .se { color: #4baca1; }
+.hd { color: #d50000; }
 
 /* leaflet */
 .leaflet-popup-content-wrapper {
@@ -211,6 +212,23 @@ body{ height:100%; font-family:Arial; font-size:12px; -webkit-touch-callout:none
 
 #overlay-tab img{ position: absolute; margin-top: -10px; margin-left: -10px; left: 50%; top: 50%; }
 
+.overlay {
+    position: absolute;
+    top: 52px;
+    bottom: 0px;
+    width:100%;
+    z-index:601;
+    background:url("../img/overlay-bck.png");
+}
+
+.overlay .info {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    font-size: 22px;
+}
+
 #viol-header{ height:22px; padding: 10px 0 10px 15px;}
 #viol-header span .label{ font-weight:bolder; font-size:13px; margin:0 10px; }
 #viol-table{ width:100%; }
@@ -221,7 +239,6 @@ body{ height:100%; font-family:Arial; font-size:12px; -webkit-touch-callout:none
 #viol-table .viol-text{ width:100%; }
 #viol-table .no_violations{ background:transparent !important; cursor:default !important; }
 #viol-table .no_violations td{ text-align:center; font-size:14px; font-weight:bolder; }
-#viol-table .viol-icon img{ width:16px; height:16px; }
 #show-all{ width:16px; height:22px; }
 #show-all:hover{ cursor:pointer; }
 
@@ -241,7 +258,6 @@ body{ height:100%; font-family:Arial; font-size:12px; -webkit-touch-callout:none
     top: 39%;
     border: 1px solid #cad7e7;
     padding:5px;
-    text-align: center;
 }
 
 #plot-hover div {
@@ -250,6 +266,10 @@ body{ height:100%; font-family:Arial; font-size:12px; -webkit-touch-callout:none
 
 #plot-hover .time {
     margin-bottom: 8px;
+}
+
+#plot-hover .points {
+    text-align: center;
 }
 
 #plot-hover .rate {
@@ -265,18 +285,12 @@ body{ height:100%; font-family:Arial; font-size:12px; -webkit-touch-callout:none
     height: 48px;
 }
 
-#plot-hover .violations div {
-    display: inline-block;
+#plot-hover .violations b {
+    margin-right: 10px;
 }
 
-#plot-hover .violations div img {
-    width: 16px;
-    height: 16px;
-    margin: 0px 5px;
-}
-
-#plot-hover .violations div + div {
-    margin-left: 10px;
+#plot-hover .mileage {
+    margin-top: 5px;
 }
 
 #settings{ position:absolute; background:white; width:164px; padding:5px; z-index:1000; border:1px solid #a2a6af; }

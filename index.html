@@ -95,7 +95,7 @@
 			</div>
 			<div id="plot-hover" style="display:none">
 				<div class="time"></div>
-				<div>
+				<div class="points">
 					<img class="icon" src="./img/penalty.png"/>
 					<div class="rate"></div>
 				</div>
@@ -113,6 +113,7 @@
 			</div>
 			<div class="arrow right"></div>
 		</div>
+		<div id="overlay-all" class="overlay" style="display:none;">
 	</div>
 	<!-- TEMPLATES -->
 	<script type="text/template" id="item-template">
@@ -141,7 +142,6 @@
 		<tr id="viol_<%= id %>_<%= ind %>" class="viol-tr<% if(type){ %> <%= type %><% } %>" data-x="<%= x %>" data-y="<%= y %>" data-index="<%= index %>">
 			<td class="viol-number"><%= num %>.</td>
 			<td class="viol-time"><%= time %></td>
-			<td class="viol-icon"><img alt="" src="./img/<%= type %>_icon.png"/></td>
 			<td class="viol-penalty"><span title="<%= $.localise.tr('Penalty points') %>"><%= penalty %></span></td>
 			<td class="viol-text"><%= text %></td>
 		</tr>

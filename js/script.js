@@ -69,6 +69,9 @@ var LOCAL_STATE = {
 	},{
 		name: "Custom",
 		cl: "se"
+	},{
+		name: "Harsh driving",
+		cl: "hd"
 	}]
 };
 
@@ -171,74 +174,24 @@ function login(code) {
 		return;
 	}
 
-	if (LANG == "ru") {
+	// set default regional settings
+	var regional = $.datepicker.regional[LANG];
+	if (regional) {
+		$.datepicker.setDefaults(regional);
+		DATE_FORMAT = rightFormat($.datepicker._defaults.dateFormat, "HH:mm:ss");
+		// also wialon locale
 		wialon.util.DateTime.setLocale(
-			["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
-			["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"],
-			["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
-			["янв","фев","мар","апр","мая","июн","июл","авг","сен","окт","ноя","дек"],
-			["day","days","days"]
-		);
-	} else if (LANG == "sk") {
-		wialon.util.DateTime.setLocale(
-			["Nedeľa","Pondelok","Utorok","Streda","Štvrtok","Piatok","Sobota"],
-			["Január","Február","Marec","Apríl","Máj","Jún","Júl","August","September","Október","November","December"],
-			["Ne","Po","Ut","St","Št","Pi","So"],
-			["Jan","Feb","Mar","Apr","May","Jul","Jun","Aug","Sep","Oct","Nov","Dec"],
-			["day","days","days"]
-		);
-	} else if (LANG == "ee") {
-		wialon.util.DateTime.setLocale(
-			["Pühapäev", "Esmaspäev", "Teisipäev", "Kolmapäev", "Neljapäev", "Reede", "Laupäev"],
-			["Jaanuar","Veebruar","Märts","Aprill","Mai","Juuni","Juuli","August","September","Oktoober","November","Detsember"],
-			["Pühap", "Esmasp", "Teisip", "Kolmap", "Neljap", "Reede", "Laup"],
-			["Jaan", "Veebr", "Märts", "Apr", "Mai", "Juuni","Juuli", "Aug", "Sept", "Okt", "Nov", "Dets"],
-			["day","days","days"]
-		);
-	} else if (LANG == "fi") {
-		wialon.util.DateTime.setLocale(
-			["Nedeľa","Pondelok","Utorok","Streda","Štvrtok","Piatok","Sobota"],
-			["Január","Február","Marec","Apríl","Máj","Jún","Júl","August","September","Október","November","December"],
-			["Ne","Po","Ut","St","Št","Pi","So"],
-			["Jan","Feb","Mar","Apr","May","Jul","Jun","Aug","Sep","Oct","Nov","Dec"],
-			["day","days","days"]
-		);
-	} else if (LANG == "es") {
-		wialon.util.DateTime.setLocale(
-			["Domingo","Lunes","Martes","Mi&eacute;rcoles","Jueves","Viernes","S&aacute;bado"],
-			["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"],
-			["Do","Lu","Ma","Mi","Ju","Vi","S&aacute;"],
-			["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"],
-			["day","days","days"]
-		);
-	} else if (LANG == "lv") {
-		wialon.util.DateTime.setLocale(
-			["svētdiena","pirmdiena","otrdiena","trešdiena","ceturtdiena","piektdiena","sestdiena"],
-			["Janvāris","Februāris","Marts","Aprīlis","Maijs","Jūnijs","Jūlijs","Augusts","Septembris","Oktobris","Novembris","Decembris"],
-			["Sv","Pr","Ot","Tr","Ct","Pk","Ss"],
-			["Jan","Feb","Mar","Apr","Mai","Jūn","Jūl","Aug","Sep","Okt","Nov","Dec"],
-			["day","days","days"]
-		);
-	} else if (LANG == "hu") {
-		wialon.util.DateTime.setLocale(
-			["Vasárnap", "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat"],
-			["Január", "Február", "Március", "Április", "Május", "Június", "Július", "Augusztus", "Szeptember", "Október", "November", "December"],
-			["Vas", "Hét", "Ked", "Sze", "Csü", "Pén", "Szo"],
-			["Jan", "Feb", "Már", "Ápr", "Máj", "Jún", "Júl", "Aug", "Szep", "Okt", "Nov", "Dec"],
-			["day","days","days"]
-		);
-	} else if (LANG == "de") {
-		wialon.util.DateTime.setLocale(
-			["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
-			["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
-			["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]
-			["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"],
-			["day","days","days"]
+			regional.dayNames,
+			regional.monthNames,
+			regional.dayNamesShort,
+			regional.monthNamesShort
 		);
 	}
 
 	wialon.core.Remote.getInstance().startBatch("initBatch");
 	var user = wialon.core.Session.getInstance().getCurrUser();
+
+	// get user locale
 	user.getLocale(function(code, locale){
 		if (code) {
 			return;
@@ -344,6 +297,8 @@ function login(code) {
  *  For now (v1.1) the only type is 'avl_unit', in future would be helpful
  */
 function changeType(type) {
+	var user = wialon.core.Session.getInstance().getCurrUser();
+
 	var flags = wialon.item.Item.dataFlag.base |
 				wialon.item.Item.dataFlag.image |
 				wialon.item.Item.dataFlag.customProps |
@@ -353,7 +308,24 @@ function changeType(type) {
 			if (type == "avl_unit") {
 				// count of units with settings
 				var okUnits = 0;
+				// can exec report
+				var canExec = true;
+
 				wialon.core.Remote.getInstance().startBatch("driveRankSettings");
+
+				// check if can exec report
+				wialon.core.Session.getInstance().searchItem(user.getAccountId(), 0x1, function(code, data) {
+					if (code || !data || !(data.getUserAccess() & wialon.item.Resource.accessFlag.viewReports)) {
+						canExec = false;
+						$("#overlay-all").html(
+							'<div class="info">' +
+							$.localise.tr("You do not appear to have access \"View report templates\" to your account.") +
+							'</div>'
+						).show();
+						$("#add-unit").empty();
+					}
+				});
+
 				for (var u = 0; u < items.length; u++) {
 					items[u].getDriveRankSettings(qx.lang.Function.bind(function (unit, code, data) {
 						unit.driveRankSettings = false;
@@ -372,24 +344,27 @@ function changeType(type) {
 							return a.driveRankSettings > b.driveRankSettings ? -1 : 1;
 						}
 					});
+
 					// change phrases if no configured units
 					if (okUnits === 0) {
 						$("#add-unit").html($.localise.tr("You have no units with adjusted driving criteria."));
 					}
 
-					$("#items").html(fillListWithItems(items));
+					$("#items").html(fillListWithItems(items, canExec));
 					addTab("tab_"+LOCAL_STATE.tab_index++);
 
-					var ids = $.cookie("idrive");
-					if (typeof ids === "undefined"){
-						// toDo: first start
-					} else {
-						ids = ids ? ids.split(",") : [];
-						for (var i = 0; i < ids.length; i++) {
-							var unit = findUnit(ids[i]);
-							if (unit && unit.driveRankSettings){
-								execute(ids[i]);
-								$("#item_"+ids[i]).hide();
+					if (canExec) {
+						var ids = $.cookie("idrive");
+						if (typeof ids === "undefined"){
+							// toDo: first start
+						} else {
+							ids = ids ? ids.split(",") : [];
+							for (var i = 0; i < ids.length; i++) {
+								var unit = findUnit(ids[i]);
+								if (unit && unit.driveRankSettings){
+									execute(ids[i]);
+									$("#item_"+ids[i]).hide();
+								}
 							}
 						}
 					}
@@ -431,9 +406,10 @@ function searchItems(callback, flags, force, type){
 /** Construct html list of found units
  *
  *  @param {Array} items   found in searchItems items
+ *  @param {Boolean} canExec   if user can exec report
  *  @returns {String} html list of items
  */
-function fillListWithItems(items){
+function fillListWithItems(items, canExec){
 	var html = [], prop = null, cache = [];
 	var template = _.template($("#item-template").html());
 	wialon.core.Remote.getInstance().startBatch("UpdateCustomPropeties");
@@ -447,7 +423,7 @@ function fillListWithItems(items){
 			"img": "",
 			"key": id,
 			"value": unit.getName(),
-			"active": unit.driveRankSettings
+			"active": unit.driveRankSettings && canExec
 		});
 		html.push(tmp);
 		cache.push([id,unit.getIconUrl(16)]);
@@ -485,159 +461,6 @@ function fillListWithItems(items){
  *  Translate text on page
  */
 function ltranslate () {
-	// ToDo: create file for regional settings and place it to i18n for gitHub?
-	$.datepicker.regional.ru = {
-		closeText: "Закрыть",
-		prevText: "Пред",
-		nextText: "След",
-		currentText: "Сегодня",
-		monthNames: ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],
-		monthNamesShort: ["Янв","Фев","Мар","Апр","Май","Июн","Июл","Авг","Сен","Окт","Ноя","Дек"],
-		dayNames: ["воскресенье","понедельник","вторник","среда","четверг","пятница","суббота"],
-		dayNamesShort: ["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
-		dayNamesMin: ["Вс","Пн","Вт","Ср","Чт","Пт","Сб"],
-		weekHeader: "Не",
-		dateFormat: "dd.mm.yy",
-		firstDay: FIRST_DAY,
-		isRTL: false,
-		showMonthAfterYear: false,
-		yearSuffix: ""
-	};
-	$.datepicker.regional.sk = {
-		closeText: "Zavrieť",
-		prevText: "Pred",
-		nextText: "Ďaľší",
-		currentText: "Dnes",
-		monthNames: ["Január","Február","Marec","Apríl","Máj","Jún","Júl","August","September","Október","November","December"],
-		monthNamesShort: ["Jan","Feb","Mar","Apr","Máj","Jún","Júl","Aug","Sep","Okt","Nov","Dec"],
-		dayNames: ["Nedeľa","Pondelok","Utorok","Streda","Štvrtok","Piatok","Sobota"],
-		dayNamesShort: ["Ned","Pon","Uto","Str","Štv","Pia","Sob"],
-		dayNamesMin: ["Ne","Po","Ut","St","Št","Pia","So"],
-		weekHeader: "Ty",
-		dateFormat: "dd.mm.yy",
-		firstDay: FIRST_DAY,
-		isRTL: false,
-		showMonthAfterYear: false,
-		yearSuffix: ""
-	};
-	$.datepicker.regional.ee = {
-		closeText: "Sulge",
-		prevText: "&laquo;",
-		nextText: "&raquo;",
-		currentText: "Täna",
-		monthNames: ["Jaanuar","Veebruar","Märts","Aprill","Mai","Juuni","Juuli","August","September","Oktoober","November","Detsember"],
-		monthNamesShort: ["Jaan", "Veebr", "Märts", "Apr", "Mai", "Juuni","Juuli", "Aug", "Sept", "Okt", "Nov", "Dets"],
-		dayNames: ["Pühapäev", "Esmaspäev", "Teisipäev", "Kolmapäev", "Neljapäev", "Reede", "Laupäev"],
-		dayNamesShort: ["Pühap", "Esmasp", "Teisip", "Kolmap", "Neljap", "Reede", "Laup"],
-		dayNamesMin: ["P","E","T","K","N","R","L"],
-		weekHeader: "Sm",
-		dateFormat: "dd.mm.yy",
-		firstDay: 1,
-		isRTL: false,
-		showMonthAfterYear: false,
-		yearSuffix: ""
-	};
-	$.datepicker.regional.fi = {
-		closeText: "Sulje",
-		prevText: "&laquo;",
-		nextText: "&raquo;",
-		currentText: "T&auml;n&auml;&auml;n",
-		monthNames: ["Tammikuu","Helmikuu","Maaliskuu","Huhtikuu","Toukokuu","Kes&auml;kuu","Hein&auml;kuu","Elokuu","Syyskuu","Lokakuu","Marraskuu","Joulukuu"],
-		monthNamesShort: ["Tammi","Helmi","Maalis","Huhti","Touko","Kes&auml;","Hein&auml;","Elo","Syys","Loka","Marras","Joulu"],
-		dayNamesShort: ["Su","Ma","Ti","Ke","To","Pe","Su"],
-		dayNames: ["Sunnuntai","Maanantai","Tiistai","Keskiviikko","Torstai","Perjantai","Lauantai"],
-		dayNamesMin: ["Su","Ma","Ti","Ke","To","Pe","La"],
-		weekHeader: "Vk",
-		dateFormat: "dd.mm.yy",
-		firstDay: 1,
-		isRTL: false,
-		showMonthAfterYear: false,
-		yearSuffix: ""
-	};
-	
-	$.datepicker.regional.es = {
-		closeText: "Cerrar",
-		prevText: "&#x3c;Ant",
-		nextText: "Sig&#x3e;",
-		currentText: "Hoy",
-		monthNames: ["Enero","Febrero","Marzo","Abril","Mayo","Junio",
-		"Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"],
-		monthNamesShort: ["Ene","Feb","Mar","Abr","May","Jun",
-		"Jul","Ago","Sep","Oct","Nov","Dic"],
-		dayNames: ["Domingo","Lunes","Martes","Mi&eacute;rcoles","Jueves","Viernes","S&aacute;bado"],
-		dayNamesShort: ["Dom","Lun","Mar","Mi&eacute;","Juv","Vie","S&aacute;b"],
-		dayNamesMin: ["Do","Lu","Ma","Mi","Ju","Vi","S&aacute;"],
-		weekHeader: "Sm",
-		dateFormat: "dd/mm/yy",
-		firstDay: 1,
-		isRTL: false,
-		showMonthAfterYear: false,
-		yearSuffix: ""
-	};
-
-	$.datepicker.regional.lv = {
-		closeText: "Aizvērt",
-		prevText: "Iepr",
-		nextText: "Nāka",
-		currentText: "Šodien",
-		monthNames: [
-			"Janvāris","Februāris","Marts","Aprīlis","Maijs","Jūnijs",
-			"Jūlijs","Augusts","Septembris","Oktobris","Novembris","Decembris"
-		],
-		monthNamesShort: ["Jan","Feb","Mar","Apr","Mai","Jūn","Jūl","Aug","Sep","Okt","Nov","Dec"],
-		dayNames: ["svētdiena","pirmdiena","otrdiena","trešdiena","ceturtdiena","piektdiena","sestdiena"],
-		dayNamesShort: ["svt","prm","otr","tre","ctr","pkt","sst"],
-		dayNamesMin: ["Sv","Pr","Ot","Tr","Ct","Pk","Ss"],
-		weekHeader: "Nav",
-		dateFormat: "dd-mm-yy",
-		firstDay: 1,
-		isRTL: false,
-		showMonthAfterYear: false,
-		yearSuffix: ""
-	};
-
-	$.datepicker.regional["hu"] = {
-		closeText: "bezár",
-		prevText: "vissza",
-		nextText: "előre",
-		currentText: "ma",
-		monthNames: [
-			"Január", "Február", "Március", "Április", "Május", "Június",
-			"Július", "Augusztus", "Szeptember", "Október", "November", "December"
-		],
-		monthNamesShort: ["Jan", "Feb", "Már", "Ápr", "Máj", "Jún", "Júl", "Aug", "Szep", "Okt", "Nov", "Dec"],
-		dayNames: ["Vasárnap", "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat"],
-		dayNamesShort: ["Vas", "Hét", "Ked", "Sze", "Csü", "Pén", "Szo"],
-		dayNamesMin: ["V", "H", "K", "Sze", "Cs", "P", "Szo"],
-		weekHeader: "Hét",
-		dateFormat: "yy.mm.dd.",
-		firstDay: 1,
-		isRTL: false,
-		showMonthAfterYear: true,
-		yearSuffix: ""
-	};
-
-	$.datepicker.regional["de"] = {
-		closeText: "Schließen",
-		prevText: "&#x3C;Zurück",
-		nextText: "Vor&#x3E;",
-		currentText: "Heute",
-		monthNames: [
-			"Januar","Februar","März","April","Mai","Juni",
-			"Juli","August","September","Oktober","November","Dezember"
-		],
-		monthNamesShort: ["Jan","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez"],
-		dayNames: ["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"],
-		dayNamesShort: ["So","Mo","Di","Mi","Do","Fr","Sa"],
-		dayNamesMin: ["So","Mo","Di","Mi","Do","Fr","Sa"],
-		weekHeader: "KW",
-		dateFormat: "dd.mm.yy",
-		firstDay: 1,
-		isRTL: false,
-		showMonthAfterYear: false,
-		yearSuffix: ""
-	};
-
 	$("#sort_1").html($.localise.tr("Unit"));
 	$("#sort_2").html($.localise.tr("Penalty"));
 	$("#sort_3").html($.localise.tr("Mileage") + ", " + $.localise.tr("km"));
@@ -668,26 +491,34 @@ $(document).ready(function () {
 		return;
 
 	LANG = get_url_parameter("lang");
-	if ((!LANG) || ($.inArray(LANG, ["en", "ru", "sk", "ee", "fi", "es", "lv", "hu", "de"]) == -1))
+	if ((!LANG) || ($.inArray(LANG, ["en", "ru", "sk", "ee", "fi", "es", "lv", "hu", "de", "fr"]) == -1))
 		LANG = "en";
-	$.localise("lang/", {language: LANG});
-	
+
+	// load datepicker locale
+	if (LANG != "en") {
+		load_script("//apps.wialon.com/plugins/wialon/i18n/" + LANG + ".js");
+	}
+
+	// translation phrases
+	$.localise("lang/", {
+		language: LANG,
+		async: true,
+		complete: ltranslate
+	});
+
+	// wialon.js
 	url += "/wsdk/script/wialon.js";
 	load_script(url, init_sdk);
 	
 	var w = $.cookie("idrive-width");
 	if (w) resizePanel($("#items"), $("#drag"), $("#statistic"), $(window).width(), {pageX:parseInt(w,10)});
-	
+
 	/// generate ticks for plot
 	var j=0, ticks = [];
 	ticks.push( LOCAL_STATE.criteria[j].yaxis.from );
 	for (; j<LOCAL_STATE.criteria.length; j++){
 		ticks.push( LOCAL_STATE.criteria[j].yaxis.to );
 	}
-	
-	ltranslate();
-	$.datepicker.setDefaults($.datepicker.regional[LANG]);
-	DATE_FORMAT = rightFormat($.datepicker._defaults.dateFormat, "HH:mm:ss");
 
 	/// BINDS
 	$("#items").on("click", ".arrow", function(){
@@ -1545,15 +1376,15 @@ function toggleHover(item) {
 			
 			var violations = "", label = "", cl = "";
 			for (var v in stat.viol) {
-				cl = "";
+				label = cl = "";
 				if (LOCAL_STATE.violation_types[v]) {
-					label = LOCAL_STATE.violation_types[v].name;
+					label = $.localise.tr(LOCAL_STATE.violation_types[v].name);
 					cl = LOCAL_STATE.violation_types[v].cl;
 				}
 				violations +=
-					"<div>" +
-						"<img src='./img/" + cl + "_icon.png'/><br/>" +
-						"<b class='" + cl + "'>" + stat.viol[v].length + "</b>" +
+					"<div class='" + cl + "'>" +
+						"<b>" + stat.viol[v].length + "</b>" +
+						"<span>" + label + "</span>" +
 					"</div>";
 			}
 			obj.find(".violations").html(violations);

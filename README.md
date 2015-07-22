@@ -1,4 +1,4 @@
-# Eco Driving, version 1.0: (Feb 20, 2015)
+# Eco Driving, version 1.0.2: (Jul 21, 2015)
 This is WEB application based on Apps from Gurtam (http://apps.wialon.com).
 
 ## Description:
@@ -13,7 +13,7 @@ and it’s up to integrators to develop their approaches towards penalties/rewar
 
 ## Requirements:
  * Browser: Google Chrome 20+, Firefox 15+, Safari 5+, IE 9+, Opera 10+
- * Language: русский, English, Slovak, Estonian, Finnish, Spanish, Latvian, Hungarian
+ * Language: русский, English, Slovak, Estonian, Finnish, Spanish, Latvian, Hungarian, German, French
  * Components: SDK
  * URL params: Active SID, Base URL, Host URL, Language, Current user
 
@@ -24,3 +24,10 @@ Working with apps in the GPS tracking system: http://docs.gurtam.com/en/hosting/
 ## Release History
  * v1.0 (Feb 20, 2015)  
 - initial release
+
+ * v1.0.1 (Jun 15, 2015)  
+- localization logic updated
+- fr and de languages added
+
+* v1.0.2 (Jul 21, 2015)  
+- Harsh driving added

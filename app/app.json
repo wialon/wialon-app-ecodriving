@@ -39,11 +39,12 @@
 		"es",
 		"lv",
 		"hu",
-		"de"
+		"de",
+		"fr"
 	],
-	"build_date": "2015-06-01",
+	"build_date": "2015-07-22",
 	"release_date": "2015-02-20",
-	"version": "1.0",
+	"version": "1.0.2",
 	"keywords": [
 		"wialon",
 		"wialon-apps"
