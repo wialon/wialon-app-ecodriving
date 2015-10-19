@@ -31,7 +31,7 @@ TRANSLATIONS = {
     "Trip length": "Útszakasz adatai:",
     "Minimal trip length": "Minimális útszakasz",
     "Acceleration": "Gyorsítás",
-    "Brake": "Fékezés",
+    "Braking": "Fékezés",
     "Turn": "Kanyarodás",
     "Speeding": "",
     "Unknown": "Egyéb",
@@ -45,5 +45,6 @@ TRANSLATIONS = {
     "No driving criteria adjusted for this unit": "",
     "You have no units with adjusted driving criteria.": "",
     "You do not appear to have access \"View report templates\" to your account.": "",
-    "Harsh driving": ""
+    "Reckless driving": "",
+    "Rank": ""
 };

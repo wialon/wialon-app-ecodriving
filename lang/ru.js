@@ -31,7 +31,7 @@ TRANSLATIONS = {
     "Trip length": "Поездка",
     "Minimal trip length": "Минимальная длина поездки",
     "Acceleration": "Ускорение",
-    "Brake": "Торможение",
+    "Braking": "Торможение",
     "Turn": "Поворот",
     "Speeding": "Скорость",
     "Unknown": "Неизвестно",
@@ -45,5 +45,6 @@ TRANSLATIONS = {
     "No driving criteria adjusted for this unit": "Для данного объекта не заданы критерии качества вождения",
     "You have no units with adjusted driving criteria.": "Нет объектов с настроенными критериями качества вождения.",
     "You do not appear to have access \"View report templates\" to your account.": "У текущего пользователя нет доступа \"Просмотр шаблонов отчетов\" по отношению к своей учетной записи.",
-    "Harsh driving": "Резкое вождение"
+    "Reckless driving": "Резкое вождение",
+    "Rank": "Оценка"
 };

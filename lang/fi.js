@@ -31,7 +31,7 @@ TRANSLATIONS = {
     "Trip length": "Matkan pituus",
     "Minimal trip length": "Lyhin matkan pituus",
     "Acceleration": "Kiihdytys",
-    "Brake": "Jarrutus",
+    "Braking": "Jarrutus",
     "Turn": "Kääntyminen",
     "Speeding": "",
     "Unknown": "Tuntematon",
@@ -45,5 +45,6 @@ TRANSLATIONS = {
     "No driving criteria adjusted for this unit": "",
     "You have no units with adjusted driving criteria.": "",
     "You do not appear to have access \"View report templates\" to your account.": "",
-    "Harsh driving": ""
+    "Reckless driving": "",
+    "Rank": ""
 };

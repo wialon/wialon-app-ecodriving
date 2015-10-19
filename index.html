@@ -48,6 +48,8 @@
 			<div id="dateinterval" class="interval-wialon"></div>
 			<div id="item-info-block" style="display:none;">
 				<span class="unit"></span>
+				<img class="icon" src="./img/rank_sm.png"/>
+				<div class="rank"></div>
 				<img class="icon" src="./img/penalty_sm.png"/>
 				<div class="rate"></div>
 			</div>
@@ -61,6 +63,7 @@
 						<tr class="header">
 							<td class="icon"></td>
 							<td class="unit"><a id="sort_1" class="sort-table" href="#"></a><img class="sort" alt="Sort" src="img/az.png"/></td>
+							<td><a id="sort_7" class="sort-table" href="#"></a><img class="sort" alt="Sort" src="img/az.png"/></td>
 							<td><a id="sort_2" class="sort-table" href="#"></a><img class="sort" alt="Sort" src="img/az.png"/></td>
 							<td><a id="sort_6" class="sort-table" href="#"></a><img class="sort" alt="Sort" src="img/az.png"/></td>
 							<td><a id="sort_5" class="sort-table" href="#"></a><img class="sort" alt="Sort" src="img/az.png"/></td>
@@ -96,6 +99,8 @@
 			<div id="plot-hover" style="display:none">
 				<div class="time"></div>
 				<div class="points">
+					<img class="icon" src="./img/rank.png"/>
+					<div class="rank"></div>
 					<img class="icon" src="./img/penalty.png"/>
 					<div class="rate"></div>
 				</div>
@@ -130,6 +135,7 @@
 		<tr id="row_<%= id %>" class="item_tr">
 			<td class="icon"><img src="<%= img %>" alt="" style="width:16px; height:16px;"/></td>
 			<td class="unit"><%= name %></td>
+			<td class="rank"><img src="./img/loader.gif"/></td>
 			<td class="rate"><img src="./img/loader.gif"/></td>
 			<td class="violations"><img src="./img/loader.gif"/></td>
 			<td class="duration"><img src="./img/loader.gif"/></td>

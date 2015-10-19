@@ -70,7 +70,7 @@ var LOCAL_STATE = {
 		name: "Custom",
 		cl: "se"
 	},{
-		name: "Harsh driving",
+		name: "Reckless driving",
 		cl: "hd"
 	}]
 };
@@ -132,14 +132,14 @@ function load_script(src, callback) {
  *  @returns {String} param value
  */
 var get_url_parameter = _.memoize(function (name) {
-	if (!name)
+	if (!name) {
 		return null;
-	var pairs = decodeURIComponent(document.location.search.substr(1)).split("&");
-	for (var i = 0; i < pairs.length; ++i) {
+	}
+	var pairs = document.location.search.substr(1).split("&");
+	for (var i = 0; i < pairs.length; i++) {
 		var pair = pairs[i].split("=");
-		if (pair[0] === name) {
-			pair.splice(0, 1);
-			return pair.join("=");
+		if (decodeURIComponent(pair[0]) === name) {
+			return decodeURIComponent(pair[1]);
 		}
 	}
 	return null;
@@ -251,9 +251,8 @@ function login(code) {
 	});
 
 	MEASURE = user.getMeasureUnits();
-	if (MEASURE == 1) {
+	if (MEASURE == 1 || MEASURE == 2) {
 		$("#sort_3").html($.localise.tr("Mileage") + ", " + $.localise.tr("mi"));
-		$("#trip-length-limit").slider("value", $("#trip-length-limit").slider("value"));
 		LOCAL_STATE.speed_limit = LOCAL_STATE.speed_limit_us;
 	}
 
@@ -329,9 +328,10 @@ function changeType(type) {
 				for (var u = 0; u < items.length; u++) {
 					items[u].getDriveRankSettings(qx.lang.Function.bind(function (unit, code, data) {
 						unit.driveRankSettings = false;
-						if (code === 0 && !("error" in data) && !($.isEmptyObject(data))) {
-							unit.driveRankSettings = true;
-							okUnits++;
+
+						if (code === 0 && hasDriveRankSettings(data)) {
+								unit.driveRankSettings = true;
+								okUnits++;
 						}
 					}, this, items[u]));
 				}
@@ -373,6 +373,15 @@ function changeType(type) {
 		}, this),
 		flags
 	);
+}
+
+/** Check if driveRankSettings not empty
+ *
+ * @param {Object} data   driveRank unit settings
+ * @returns {bool}
+ */
+function hasDriveRankSettings(data) {
+	return !("error" in data || $.isEmptyObject(data) || (_.keys(data).length == 1 && 'global' in data));
 }
 
 /** Search items function
@@ -467,6 +476,7 @@ function ltranslate () {
 	$("#sort_5").html($.localise.tr("Duration"));
 	$("#sort_4").html($.localise.tr("Trips"));
 	$("#sort_6").html($.localise.tr("Violations"));
+	$("#sort_7").html($.localise.tr("Rank"));
 	
 	$("#add-unit").html($.localise.tr("Add units from the list on the left"));
 
@@ -565,7 +575,7 @@ $(document).ready(function () {
 	$("#all-stat").on("click", ".item_tr", function(evt){
 		var id = $(this).attr("id").split("_")[1];
 		if($(evt.target).hasClass("update")){
-			$(this).children(".rate, .mileage, .duration, .trips, .violations").html("<img src='./img/loader.gif'/>");
+			$(this).children(".rank, .rate, .mileage, .duration, .trips, .violations").html("<img src='./img/loader.gif'/>");
 			$(this).children(".duration").attr("title","").removeClass("update");
 			execute(id, true);
 		} else {
@@ -806,7 +816,7 @@ function updateTabTime(){
 			cleanMap();
 			$("#viol-table").html("");
 			$("#viol-header").hide();
-			$("#item-info-block .rate").html("");
+			$(".rate, .rank", "#item-info-block").html("");
 			PLOT.setData([]);
 			PLOT.unhighlight();
 			PLOT.draw();
@@ -815,7 +825,7 @@ function updateTabTime(){
 				abortRequest(tab.units[i]);
 				if(tab.units[i].timeout){ clearTimeout(tab.units[i].timeout); }
 				tab.units[i].timeout = setTimeout(qx.lang.Function.bind(execute, this, tab.units[i].id, true), 1000);
-				$("#row_"+tab.units[i].id).children(".rate, .mileage, .duration, .trips, .violations").html("<img src='./img/loader.gif'/>");
+				$("#row_"+tab.units[i].id).children(".rank, .rate, .mileage, .duration, .trips, .violations").html("<img src='./img/loader.gif'/>");
 				$("#row_"+tab.units[i].id).children(".duration").attr("title","").removeClass("update");
 			}
 		}
@@ -975,11 +985,11 @@ function execReport (req) {
 					n: 'unit_ecodriving',
 					l: 'Driving behavior',
 					f: 0x200110,
-					c: 'time_begin,time_end,violation_name,violation_value,max_speed,violation_mark,violations_count',
-					cl: 'Beginning,End,Violation name,Value,Max speed,Mark,Violation count',
+					c: 'time_begin,time_end,violation_name,violation_value,max_speed,violation_mark,violations_count,violation_rank',
+					cl: 'Beginning,End,Violation name,Value,Max speed,Mark,Violation count,Violation rank',
 					sl: '',
 					s:'',
-					p: '{"unfinished_ival":0,"duration_format":0}',
+					p: '{"grouping":"{\\"type\\":\\"trip_id\\"}","duration_format":"0","geozones_ex":"{\\"split\\":0}"}',
 					sch: {y:0,m:0,w:0,f1:0,f2:0,t1:0,t2:0}
 				}, {
 					n: 'unit_trips',
@@ -990,6 +1000,16 @@ function execReport (req) {
 					sl: '',
 					s: '',
 					p: '{"unfinished_ival":0,"base_eh_sensor":{"mask":"*"},"sensor_name":"*","duration_format":"0"}',
+					sch: {y:0,m:0,w:0,f1:0,f2:0,t1:0,t2:0}
+				}, {
+					n: 'unit_stats',
+					l: 'Statistics',
+					f: 0,
+					c: '',
+					cl: '',
+					s: 'us_units',
+					sl: '',
+					p: '{"us_units":' + MEASURE + '}',
 					sch: {y:0,m:0,w:0,f1:0,f2:0,t1:0,t2:0}
 				}]
 			}
@@ -1029,7 +1049,6 @@ function execReport (req) {
 
 	wialon.core.Remote.getInstance().remoteCall('core/batch', params, function (code, obj) {
 		// if a still alive
-
 		var finalData = {
 			mileage: 0,
 			duration: 0,
@@ -1043,13 +1062,19 @@ function execReport (req) {
 
 		if (code === 0 && obj && obj.length && obj.length == 4 && !('error' in obj[0]) && ('reportResult' in obj[0])) {
 
+			var len = 0;
 			var result = obj[0].reportResult;
 
 			// both unit_driverank and unit_trips exists
 			// get data from Total
 			if (result.tables.length == 2) {
+				len = result.tables[0].total.length;
 				// result.tables[0] - unit_driverank
-				finalData.rate = result.tables[0].total[5];
+				finalData.rate = result.tables[0].total[len - 2 - (len > 8 ? 1 : 0)];
+				finalData.rank = null;
+				if (len > 8) {
+					finalData.rank = result.tables[0].total[len - 1];
+				}
 				// result.tables[1] - unit_trips
 				finalData.mileage = result.tables[1].totalRaw[3].v;
 				finalData.duration = result.tables[1].totalRaw[2].v;
@@ -1069,15 +1094,30 @@ function execReport (req) {
 				// init violations stats
 				trips[i].viol = {};
 				trips[i].rate = 0;
+				trips[i].rank = null;
 				// check if violations were in cur trip
 				if (vi < violations.length && trips[i].t1 <= violations[vi].t1 && violations[vi].t2 <= trips[i].t2) {
-					trips[i].rate = parseInt(violations[vi].c[5].t, 10);
+					len = violations[vi].c.length;
+					trips[i].rate = parseInt(violations[vi].c[len - 2 - (len > 8 ? 1 : 0)].t, 10);
+					// info about rank exists in report
+					if (len > 8) {
+						trips[i].rank = violations[vi].c[len - 1].t;
+					}
+
 					if (violations[vi].r) {
 						finalData.violations_count += violations[vi].r.length;
 						// trips violation loop
 						for (var j = 0, viol = null; j < violations[vi].r.length; j++) {
 							// violation
 							viol = violations[vi].r[j].c;
+							if (len >= 8) {
+								// remove first 'group' column
+								viol = viol.slice(1);
+								// skip zero violations
+								if (viol[5].v == 0) {
+									continue;
+								}
+							}
 							// group violations by type
 							if (!(viol[2].v in trips[i].viol)) {
 								trips[i].viol[viol[2].v] = [viol];
@@ -1163,25 +1203,19 @@ function populateStat(tab, id, limit, leave){
 		var mileage = 0;
 		if (LOCAL_STATE.tabs[tab].stat[id]) {
 			if(stat.error){
-				tag.children(".rate, .mileage, .duration, .trips, .violations").html("");
+				tag.children(".rank, .rate, .mileage, .duration, .trips, .violations").html("");
 				tag.children(".duration").attr("title", $.localise.tr("Error while getting data")).addClass("update");
 			} else {
-				mileage = "-";
-				if(stat.mileage){
-					if (MEASURE == 1) {
-						mileage = (stat.mileage * KM2MI / 1000).toFixed(1);
-					} else {
-						mileage = (stat.mileage / 1000).toFixed(1);
-					}
-				}
+				mileage = stat.mileage ? (stat.mileage / 1000).toFixed(1) : "-";
 				tag.children(".duration").html( stat.duration ? toHHMMSS(stat.duration) : "-" );
 				tag.children(".mileage").html(mileage);
 				tag.children(".rate").html(stat.rate != null ? stat.rate : "-");
+				tag.children(".rank").html(stat.rank != null ? stat.rank : "-");
 				tag.children(".trips").html(stat.trips.length || "-");
 				tag.children(".violations").html(stat.trips.length ? stat.violations_count : "-");
 			}
 		} else {
-			tag.children(".rate, .mileage, .duration, .trips, .violations").html("<img src='./img/loader.gif'/>");
+			tag.children(".rank, .rate, .mileage, .duration, .trips, .violations").html("<img src='./img/loader.gif'/>");
 			tag.children(".duration").attr("title","").removeClass("update");
 		}
 	} else if (tab_info.length==4) {
@@ -1210,14 +1244,17 @@ function showStatistic(tab_id, limit, leave){
 	$("#viol-table").html("");
 	$("#viol-header").hide();
 	
+	$("#item-info-block .rank")
+		.html(tab.stat[tab.units.id].rank ? tab.stat[tab.units.id].rank + "" : "&nbsp;")
+		.attr("title", tab.stat[tab.units.id].rank != null ? tab.stat[tab.units.id].rank : "");
 	$("#item-info-block .rate")
 		.html(tab.stat[tab.units.id].rate ? tab.stat[tab.units.id].rate + "" : "&nbsp;")
 		.attr("title", tab.stat[tab.units.id].rate != null ? tab.stat[tab.units.id].rate : "");
 	$("#item-info-block .unit").html(unit.getName());
 	
 	var from_to = $("#dateinterval").intervalWialon("label");
-	var txt = " " + (MEASURE == 1 ? $.localise.tr("mi") : $.localise.tr("km"));
-	var format_limit = (MEASURE == 1 ? (limit * KM2MI).toFixed(1) : limit);
+	var txt = " " + (MEASURE == 1 || MEASURE == 2 ? $.localise.tr("mi") : $.localise.tr("km"));
+	var format_limit = (MEASURE == 1 || MEASURE == 2 ? (limit * KM2MI).toFixed(1) : limit);
 
 	$("#plot-name").html(
 		wialon.util.String.sprintf(
@@ -1365,13 +1402,14 @@ function toggleHover(item) {
 			
 			var trip = " ";
 			var mile = stat.c[3].v;
-			if (MEASURE == 1) {
-				trip += (mile * KM2MI / 1000).toFixed(1) + " " + $.localise.tr("mi");
+			if (MEASURE == 1 || MEASURE == 2) {
+				trip += (mile / 1000).toFixed(1) + " " + $.localise.tr("mi");
 			} else {
 				trip += (mile / 1000).toFixed(1) + " " + $.localise.tr("km");
 			}
 			obj.find(".time").html(from_to);
 			obj.find(".rate").html("<b>" + stat.rate + "</b>");
+			obj.find(".rank").html("<b>" + (stat.rank || 6) + "</b>");
 			obj.find(".mileage").html($.localise.tr("Trip length") + trip  + ", " + toHHMMSS(stat.t2 - stat.t1));
 			
 			var violations = "", label = "", cl = "";
@@ -1578,7 +1616,7 @@ function showViolations(id, ind) {
  */
 function getSpeedIndex(speed){
 	speed = (!speed || speed < 0) ? 0 : speed;
-	if (MEASURE == 1) {
+	if (MEASURE == 1 || MEASURE == 2) {
 		speed = speed * KM2MI;
 	}
 	var index = null;
@@ -1794,6 +1832,13 @@ function sortUnits(tab) {
 				"id", tab.sort>0)
 			);
 		break;
+		case 6: // sort by violations rank
+			tab.units.sort(sortBy(
+				function(x){
+					return tab.stat[x] && tab.stat[x].rank!==null ? tab.stat[x].rank : -1; },
+				"id", tab.sort>0)
+			);
+		break;
 	}
 }
 
@@ -1906,12 +1951,15 @@ function switchTab(tab_id){
 			"border-bottom-color": ""
 		});
 	
+	var $itemInfoBlock = $("#item-info-block");
 	if(tab.tab_type){
 		tab_html.parent().css({"border-bottom-color":LOCAL_STATE.colors[tab.color],"border-top-color":""});
-		var ka = tab.stat[tab.units.id] && tab.stat[tab.units.id].rate ? tab.stat[tab.units.id].rate : "";
-		$("#item-info-block").show().children(".rate").html(ka);
+		var rate = tab.stat[tab.units.id] && tab.stat[tab.units.id].rate ? tab.stat[tab.units.id].rate : "";
+		var rank = tab.stat[tab.units.id] && tab.stat[tab.units.id].rank ? tab.stat[tab.units.id].rank : "";
+		$itemInfoBlock.show().children(".rate").html(rate);
+		$itemInfoBlock.children(".rank").html(rank);
 	} else {
-		$("#item-info-block").hide();
+		$itemInfoBlock.hide();
 	}
 	
 	LOCAL_STATE.tab_history.push(tab_id);

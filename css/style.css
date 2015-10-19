@@ -47,6 +47,13 @@ body{ height:100%; font-family:Arial; font-size:12px; -webkit-touch-callout:none
     margin-bottom: 5px;
     font-weight: bolder;
 }
+#item-info-block .rank {
+    display: inline-block;
+    font-size: 16px;
+    vertical-align: bottom;
+    margin-bottom: 5px;
+    font-weight: bolder;
+}
 #item-info-block .rate:hover{ cursor:default; }
 #items{ width:20%; height:100%; position:absolute; top:0; overflow-y:auto; overflow-x:hidden; }
 #items .item, #items .item-inactive {
@@ -280,7 +287,19 @@ body{ height:100%; font-family:Arial; font-size:12px; -webkit-touch-callout:none
     margin-left: -5px;
 }
 
+#plot-hover .rank {
+    display: inline-block;
+    vertical-align: bottom;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
 #plot-hover .icon {
+    width: 48px;
+    height: 48px;
+}
+
+#plot-hover .rank-icon {
     width: 48px;
     height: 48px;
 }

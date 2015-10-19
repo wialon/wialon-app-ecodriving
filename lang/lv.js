@@ -31,7 +31,7 @@ TRANSLATIONS = {
     "Trip length": "Brauciens",
     "Minimal trip length": "Brauciena minimāls gārums",
     "Acceleration": "Paātrināšana",
-    "Brake": "Bremzēšana",
+    "Braking": "Bremzēšana",
     "Turn": "Pagrieziens",
     "Speeding": "",
     "Unknown": "Nav zināms",
@@ -45,5 +45,6 @@ TRANSLATIONS = {
     "No driving criteria adjusted for this unit": "",
     "You have no units with adjusted driving criteria.": "",
     "You do not appear to have access \"View report templates\" to your account.": "",
-    "Harsh driving": ""
+    "Reckless driving": "",
+    "Rank": ""
 };

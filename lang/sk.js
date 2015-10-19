@@ -31,7 +31,7 @@ TRANSLATIONS = {
     "Trip length": "Dĺžka trasy",
     "Minimal trip length": "Minimálna dĺžka trasy",
     "Acceleration": "Zrýchlenie",
-    "Brake": "Brzdenie",
+    "Braking": "Brzdenie",
     "Turn": "Prejazd zákrutou",
     "Speeding": "",
     "Unknown": "Neznámy",
@@ -45,5 +45,6 @@ TRANSLATIONS = {
     "No driving criteria adjusted for this unit": "",
     "You have no units with adjusted driving criteria.": "",
     "You do not appear to have access \"View report templates\" to your account.": "",
-    "Harsh driving": ""
+    "Reckless driving": "",
+    "Rank": ""
 };

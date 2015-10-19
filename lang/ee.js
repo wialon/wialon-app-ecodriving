@@ -31,7 +31,7 @@ TRANSLATIONS = {
     "Trip length": "Teekond",
     "Minimal trip length": "Teekonna minimaalne pikkus",
     "Acceleration": "Kiirendamine",
-    "Brake": "Pidurdamine",
+    "Braking": "Pidurdamine",
     "Turn": "Pööre",
     "Speeding": "Kiirus",
     "Unknown": "Teadmata",
@@ -44,6 +44,7 @@ TRANSLATIONS = {
     "Add units from the list on the left": "Lisage objekte vasakpoolsest nimekirjast",
     "No driving criteria adjusted for this unit": "Antud objekti suhtes ei ole sõidukijuhtimiskvaliteedi kriteeriume valitud",
     "You have no units with adjusted driving criteria.": "Valitud sõidukijuhtimiskvaliteedi kriteeriumitele vastavaid objekte ei ole.",
-    "You do not appear to have access \"View report templates\" to your account.": "Puudub ligipääsuõigus\“Vaadatakse läbi \teie kasutajakontot puudutavad aruandetõmmised.",
-    "Harsh driving": "Järsk sõidustiil"
+    "You do not appear to have access \"View report templates\" to your account.": "Puudub ligipääsuõigus \"Vaadatakse läbi\" teie kasutajakontot puudutavad aruandetõmmised.",
+    "Reckless driving": "Järsk sõidustiil",
+    "Rank": ""
 };

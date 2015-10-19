@@ -1,4 +1,4 @@
-# Eco Driving, version 1.0.2: (Jul 21, 2015)
+# Eco Driving, version 1.0.4: (Oct 16, 2015)
 This is WEB application based on Apps from Gurtam (http://apps.wialon.com).
 
 ## Description:
@@ -29,5 +29,11 @@ Working with apps in the GPS tracking system: http://docs.gurtam.com/en/hosting/
 - localization logic updated
 - fr and de languages added
 
-* v1.0.2 (Jul 21, 2015)  
+ * v1.0.2 (Jul 21, 2015)  
 - Harsh driving added
+
+ * v1.0.3 (Aug 13, 2015)  
+- Rank added
+
+ * v1.0.4 (Oct 16, 2015)  
+- US and Imperial metrics fixed

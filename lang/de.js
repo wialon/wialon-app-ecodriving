@@ -31,7 +31,7 @@ TRANSLATIONS = {
     "Trip length": "Streckenlaenge",
     "Minimal trip length": "Minimale Streckenlaenge",
     "Acceleration": "Beschleunigung",
-    "Brake": "Bremsen",
+    "Braking": "Bremsen",
     "Turn": "Kurven",
     "Speeding": "Geschwindigkeit",
     "Unknown": "Unbekannt",
@@ -45,5 +45,6 @@ TRANSLATIONS = {
     "No driving criteria adjusted for this unit": "Keine Fahrkriterien eingestellt fuer dieses Objekt",
     "You have no units with adjusted driving criteria.": "Sie haben keine Objekte mit aktivierten Fahrkriterien",
     "You do not appear to have access \"View report templates\" to your account.": "",
-    "Harsh driving": ""
+    "Reckless driving": "",
+    "Rank": ""
 };
