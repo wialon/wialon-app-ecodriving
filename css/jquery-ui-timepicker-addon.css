@@ -27,7 +27,7 @@
 #ui-datepicker-div{ background: #FFF; border:1px solid #cad7e7; z-index:1001 !important; }
 /* with multiple calendars */
 .ui-widget-content a { color: #444; }
-.ui-widget-header { background: #D6DEEB; color: #444; font-weight: bold; }
+.ui-widget-header { background: #dde8ed; color: #444; font-weight: bold; }
 .ui-widget-header a { color: #444; }
 .ui-widget-overlay { position:fixed; top:0; left:0; width:100%; height:100%; }
 .ui-datepicker { width: 17em; padding: .2em .2em 0; display: none; }
@@ -52,7 +52,7 @@
 .ui-datepicker .ui-datepicker-buttonpane { background-image: none; margin: .7em 0 0 0; padding: 0 .2em; border-left: 0; border-right: 0; border-bottom: 0; }
 .ui-datepicker .ui-datepicker-buttonpane button { float: right; margin: .5em .2em .4em; cursor: pointer; padding: .2em .6em .3em .6em; width: auto; overflow: visible; }
 .ui-datepicker .ui-datepicker-buttonpane button.ui-datepicker-current { float: left; }
-.ui-datepicker .ui-state-active{ font-weight:bold; background: #E8EFF7; }
+.ui-datepicker .ui-state-active{ font-weight:bold; background: #dde8ed; }
 .ui-datepicker .ui-datepicker-unselectable { color:#6c737b }
 .ui-timepicker-div > div { color: white; }
 .ui-datepicker-month { color: #444; }

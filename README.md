@@ -1,4 +1,4 @@
-# Eco Driving, version 1.0.4: (Oct 16, 2015)
+# Eco Driving, version 2.1.0: (Oct 22, 2018)
 This is WEB application based on Apps from Gurtam (http://apps.wialon.com).
 
 ## Description:
@@ -37,3 +37,8 @@ Working with apps in the GPS tracking system: http://docs.gurtam.com/en/hosting/
 
  * v1.0.4 (Oct 16, 2015)  
 - US and Imperial metrics fixed
+
+ * v2.1.0 (Mar 22, 2018)  
+- Added export implenemtation
+- Implemented new design
+- Fixed display units and drivers with no violations

@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Eco Driving</title>
+	<title></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta http-equiv="pragma" content="no-cache"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
 	<meta name="apple-mobile-web-app-capable" content="yes"/>
 	<meta names="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-	<link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
-	
+	<link href="./img/favicon.png" rel="shortcut icon" type="image/x-icon" />
+
 	<link rel="stylesheet" type="text/css" href="./css/jquery-ui-timepicker-addon.css"/>
 	<link rel="stylesheet" type="text/css" href="./css/leaflet.css"/>
 	<link rel="stylesheet" type="text/css" href="./css/numbered_markers.leaflet.css"/>
-	
+	<link rel="stylesheet" type="text/css" href="./css/font.css"/>
+
 	<!--[if lte IE 9]><script language="javascript" type="text/javascript" src="./js/flot/excanvas.min.js"></script><![endif]-->
-	
+
 	<script src="./js/jquery/jquery-1.8.3.min.js"></script>
 	<script src="./js/jquery/jquery-ui-1.10.3.custom.js"></script>
 	<script src="./js/jquery/jquery.cookie.js"></script>
@@ -33,29 +34,65 @@
 	<script src="//apps.wialon.com/plugins/leaflet/webgis/webgis.leaflet.js"></script>
 	<script src="//apps.wialon.com/plugins/wialon/interval/interval.wialon.js"></script>
 	<script src="./js/script.js"></script>
+	<script>
+		var availableLanguages=null;
+		var documentationLink=null;
+		var is_white=null;
+		var APP_CONFIG = {};
+		function appPredefineVariables(app_langs,doc_link,is_whitelabeled,config){
+			availableLanguages=app_langs;
+			documentationLink=is_whitelabeled?(config.help_url_link ? decodeURIComponent(config.help_url_link) : null):doc_link;
+			is_white=is_whitelabeled;
+			APP_CONFIG=config;
+		}
+	</script>
 </head>
 <body>
 	<div id="container">
 		<div id="header">
-			<img class="logo" alt="" src="img/logo.png"/>
-			<span class="app-name">Eco Driving</span>
-			<a class="help" target="_blank" href="/docs/en/ecodriving.html">
+			<img class="logo" alt="" src="img/logo.svg"/>
+			<span class="app-name"></span>
+			<a class="help" target="_blank" href="/docs/en/ecodriving.html" style="display:none;">
 				<img src="img/help.png"/>
 			</a>
 		</div>
-		<div id="header-delim"></div>
-		<div class="date-time-content">
-			<div id="dateinterval" class="interval-wialon"></div>
-			<div id="item-info-block" style="display:none;">
-				<span class="unit"></span>
-				<img class="icon" src="./img/rank_sm.png"/>
-				<div class="rank"></div>
-				<img class="icon" src="./img/penalty_sm.png"/>
-				<div class="rate"></div>
+		<div id="footer">
+			<div class="arrow left"></div>
+			<div class="scroll">
+				<ul id="tabs"><li class="add-tab"></li></ul>
 			</div>
+			<div class="arrow right"></div>
 		</div>
+        <div class="date-time-content">
+            <div id="mode_switcher" class="interval-wialon"></div>
+            <div id="dateinterval" class="interval-wialon"></div>
+            <div id="item-info-block" style="display:none;">
+                <span class="unit"></span>
+                <img class="icon" src="./img/star.svg"/>
+                <div class="rank"></div>
+                <img class="icon" src="./img/penalty.svg"/>
+                <div class="rate"></div>
+                <div class="splitter">
+                </div>
+				<div class="export-details-page">
+                    <div class="export-to-xls" >.xlsx</div>
+                    <div class="export-to-pdf" >.pdf</div>
+                </div>
+            </div>
+        </div>
+
 		<div id="stat-tab" class="tab-content">
-			<div id="items"></div>
+			<div id="items">
+				<div id="filter">
+					<img class="sort" src="./img/az.svg" draggable="false"/>
+					<span class="mode icon-list_objects"></span>
+					<div class="placeholder">
+						<input class="mask" type="text"/>
+						<div class="overlay"></div>
+					</div>
+				</div>
+				<div class="list"></div>
+			</div>
 			<div id="drag"></div>
 			<div id="statistic">
 				<table id="all-stat">
@@ -69,7 +106,11 @@
 							<td><a id="sort_5" class="sort-table" href="#"></a><img class="sort" alt="Sort" src="img/az.png"/></td>
 							<td><a id="sort_3" class="sort-table" href="#"></a><img class="sort" alt="Sort" src="img/az.png"/></td>
 							<td><a id="sort_4" class="sort-table" href="#"></a><img class="sort" alt="Sort" src="img/az.png"/></td>
-							<td></td>
+							<td class="delete-all-button" ><img id="clear-all" alt="Clear list" src="img/del_all.png"/></td>
+                            <td class="export" >
+							<div class="export-to-xls" >.xlsx</div>
+                            <div class="export-to-pdf" >.pdf</div>
+                            </td>
 						</tr>
 					</thead>
 					<tbody></tbody>
@@ -80,13 +121,12 @@
 		</div>
 		<div id="item-tab" class="tab-content" style="display:none;">
 			<div class="plot-container">
-				<div id="plot-name"></div>
 				<div id="plot"></div>
 			</div>
 			<div class="viol-container">
 				<div class="viol-left">
 					<div id="no-data" style="display:none;"></div>
-					<div id="viol-header"><img id="show-all" src="img/m.png" alt=""/><span></span></div>
+					<div id="viol-header"><div id="show-all" class="icon-marker"></div><span></span></div>
 					<div class="viol-table-container">
 						<table id="viol-table"></table>
 					</div>
@@ -99,9 +139,10 @@
 			<div id="plot-hover" style="display:none">
 				<div class="time"></div>
 				<div class="points">
-					<img class="icon" src="./img/rank.png"/>
+					<img class="icon" src="./img/star.svg"/>
 					<div class="rank"></div>
-					<img class="icon" src="./img/penalty.png"/>
+					<div class="separator"></div>
+					<img class="icon" src="./img/penalty.svg"/>
 					<div class="rate"></div>
 				</div>
 				<div class="violations"></div>
@@ -111,28 +152,61 @@
 		<div id="overlay-tab" class="tab-content" style="display:none;">
 			<div id="progress"></div>
 		</div>
-		<div id="footer">
-			<div class="arrow left"></div>
-			<div class="scroll">
-				<ul id="tabs"><li class="add-tab-container"><div class="add-tab">&nbsp;</div></li></ul>
-			</div>
-			<div class="arrow right"></div>
-		</div>
 		<div id="overlay-all" class="overlay" style="display:none;">
 	</div>
 	<!-- TEMPLATES -->
+    <script type="text/template" id="driver-template">
+        <div  class="<%= cls %>" data-id="<%= key %>">
+            <div class="item-content">
+                <div class="item-img">
+                    <img src="<%= img %>" alt="" width="16px"/>
+                </div>
+                <div class="item-name-block"><%= value %></div>
+                <div class="clear"></div>
+            </div>
+            <span class="icon icon-move_list arrow" title="<%= $.localise.tr('Add driver') %>"></span>
+            <span class="icon icon-checked"></span>
+        </div>
+    </script>
+    <script type="text/template" id="driver-group-template">
+            <div class="<%= cls %>" data-id="<%= id %>">
+                <div class="item-content">
+                    <div class="check hidden">
+                        <span class="icon-arrow"></span>
+                    </div>
+                    <div class="item-name-block"><%= value %></div>
+                    <div class="clear"></div>
+                </div>
+            <span class="icon icon-move_list arrow" title="<%= $.localise.tr('Add group') %>"></span>
+        <span class="icon icon-checked"></span>
+        </div>
+    </script>
 	<script type="text/template" id="item-template">
-		<div class="item<%= active ? '' : '-inactive' %>" id="item_<%= key %>">
-			<div class="item-content" title="<%= active ? '' : $.localise.tr('No driving criteria adjusted for this unit') %>">
-				<div class="item-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="" style="width:16px; height:16px;"/></div>
+		<div class="<%= cls %>" data-id="<%= id %>">
+			<div class="item-content" title="<%= disabled ? '' : $.localise.tr('No driving criteria adjusted for this unit') %>">
+				<div class="item-img"><img src="<%= img ? img : 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7' %>" alt="" style="width:16px; height:16px;"/></div>
 				<div class="item-name-block"><%= value %></div>
 				<div class="clear"></div>
 			</div>
-			<img class="arrow" src="img/arrow.png" alt="" title="<%= $.localise.tr('Add unit') %>"/>
+			<span class="icon icon-move_list arrow" title="<%= $.localise.tr('Add unit') %>"></span>
+			<span class="icon icon-checked"></span>
+		</div>
+	</script>
+	<script type="text/template" id="item-group-template">
+		<div class="<%= cls %>" data-id="<%= id %>">
+			<div class="item-content">
+				<div class="check hidden">
+					<span class="icon-arrow"></span>
+				</div>
+				<div class="item-name-block"><%= value %></div>
+				<div class="clear"></div>
+			</div>
+			<span class="icon icon-move_list arrow" title="<%= $.localise.tr('Add group') %>"></span>
+			<span class="icon icon-checked"></span>
 		</div>
 	</script>
 	<script type="text/template" id="all-stat-row">
-		<tr id="row_<%= id %>" class="item_tr">
+		<tr id="row_<%= id %>" class="item_tr" type="<%= type %>">
 			<td class="icon"><img src="<%= img %>" alt="" style="width:16px; height:16px;"/></td>
 			<td class="unit"><%= name %></td>
 			<td class="rank"><img src="./img/loader.gif"/></td>
@@ -141,7 +215,13 @@
 			<td class="duration"><img src="./img/loader.gif"/></td>
 			<td class="mileage"><img src="./img/loader.gif"/></td>
 			<td class="trips"><img src="./img/loader.gif"/></td>
-			<td class="delete delete-stat" title="<%= $.localise.tr('Delete statistics') %>"><img src="img/del.png" alt="delete"/></td>
+			<td class="delete delete-stat" title="<%= $.localise.tr('Remove from the list') %>"><img src="img/del.png" alt="delete"/></td>
+            <td class="export-td" >
+                <% if( type === 'unit' ){ %>
+                <div class="export-to-xls" >.xlsx</div>
+                <div class="export-to-pdf" >.pdf</div>
+                <% }%>
+            </td>
 		</tr>
 	</script>
 	<script type="text/template" id="viol-row">
@@ -152,6 +232,20 @@
 			<td class="viol-text"><%= text %></td>
 		</tr>
 	</script>
-	<script type="text/template" id="item-tab-template"><li <% if(!tab_type){ %>class="stat-tab" style="border-bottom-color:<%= color %>;"<% } %>><div id="<%= id %>" class="tab <%= cls %>" title="<%= title %>" <% if(!close){ %>style="padding-right:10px;"<% } %>><% if(img){ %><img class="icon" alt="" src="<%= img %>"/><% } %><%= name %></div><% if(close){ %><div id="closetab_<%= id %>" title="<%= $.localise.tr('Close tab') %>" class="closetab">&nbsp;</div><% }%></li></script>
+	<script type="text/template" id="item-tab-template">
+        <li <% if( color ){ %>class="stat-tab" style="border-color:<%= color %>;"<% } %>>
+        <%= context %>
+        <div id="<%= id %>" class="tab tab-title <%= cls %>" title="<%= title %>"
+        <% if(!close){ %>style="padding-right:10px;"<% } %>>
+            <% if(img){ %>
+                <div><img class="icon" alt="" src="<%= img %>"/></div>
+            <% } %>
+            <div><%= name %></div>
+        </div>
+        <% if(close){ %>
+            <div id="closetab_<%= id %>" title="<%= $.localise.tr('Close tab') %>" class="closetab">&nbsp;</div>
+        <% }%>
+        </li>
+    </script>
 </body>
 </html>
